@@ -45,6 +45,28 @@ export interface MovieIntelligence {
   tags: string[];
 }
 
+export interface PodcastSegment {
+  title: string;
+  text: string;
+  start_time: number;
+  end_time: number;
+}
+
+export interface PodcastEpisode {
+  id: string;
+  title: string;
+  date: string;
+  duration: number;
+  duration_display: string;
+  audio_url: string;
+  file_size: number;
+  transcript: string;
+  segments: PodcastSegment[];
+  story_count: number;
+  word_count: number;
+  voice: string;
+}
+
 export interface UserPreferences {
   user_id: string;
   categories: Category[];

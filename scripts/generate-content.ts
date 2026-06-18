@@ -718,6 +718,10 @@ async function main() {
   const movies = MOVIES.map(m => generateMovieReport(m));
   saveMovieStaticData(movies);
 
+  // Generate daily podcast
+  const { generatePodcast } = await import('./generate-podcast.js');
+  await generatePodcast();
+
   console.log(`Done. Generated ${newArticles.length} new article(s). Total: ${state.articles.length} | Movies: ${movies.length}`);
 }
 

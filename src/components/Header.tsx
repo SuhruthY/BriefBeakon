@@ -31,6 +31,7 @@ export default function Header() {
           <nav className="flex items-center gap-1">
             <NavLink to="/" label="Today" current={location.pathname} onClick={playTick} />
             <NavLink to="/movies" label="Movies" current={location.pathname} onClick={playTick} />
+            <NavLink to="/podcast" label="Podcast" current={location.pathname} onClick={playTick} />
             <Link
               to="/preferences"
               onClick={playTick}

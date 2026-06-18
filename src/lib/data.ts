@@ -1,8 +1,9 @@
-import type { Article, MovieIntelligence } from '../types'
+import type { Article, MovieIntelligence, PodcastEpisode } from '../types'
 import { supabase } from './supabase'
 
 let cachedArticles: Article[] | null = null
 let cachedMovies: MovieIntelligence[] | null = null
+let cachedPodcasts: PodcastEpisode[] | null = null
 
 function dataUrl(path: string): string {
   const base = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL
@@ -65,6 +66,41 @@ export async function getArticlesByCategory(category: string): Promise<Article[]
 export function resetDataCache() {
   cachedArticles = null
   cachedMovies = null
+  cachedPodcasts = null
+}
+
+export async function getPodcasts(): Promise<PodcastEpisode[]> {
+  if (cachedPodcasts) return cachedPodcasts
+
+  try {
+    if (supabase) {
+      const { data } = await supabase
+        .from('podcast_episodes')
+        .select('*')
+        .order('date', { ascending: false })
+        .limit(50)
+
+      if (data && data.length > 0) {
+        cachedPodcasts = data as PodcastEpisode[]
+        return cachedPodcasts
+      }
+    }
+  } catch {
+    // Fall through
+  }
+
+  try {
+    const resp = await fetch(dataUrl('data/podcasts.json'))
+    if (resp.ok) {
+      const data = await resp.json() as PodcastEpisode[]
+      cachedPodcasts = data
+      return cachedPodcasts
+    }
+  } catch {
+    // No data
+  }
+
+  return []
 }
 
 export async function getMovies(): Promise<MovieIntelligence[]> {

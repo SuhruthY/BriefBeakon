@@ -1,28 +1,44 @@
+import { FC, SVGProps, ForwardRefExoticComponent, RefAttributes } from 'react'
+
+type LucideIcon = ForwardRefExoticComponent<
+  Omit<SVGProps<SVGSVGElement>, 'ref'> & RefAttributes<SVGSVGElement>
+>
+
 declare module 'lucide-react' {
-  import type { FC, SVGProps } from 'react'
-  export type Icon = FC<SVGProps<SVGSVGElement>>
-  
-  export const Sparkles: Icon
-  export const Newspaper: Icon
-  export const Clock: Icon
-  export const Tag: Icon
-  export const Settings: Icon
-  export const ArrowLeft: Icon
-  export const Calendar: Icon
-  export const BarChart3: Icon
-  export const Users: Icon
-  export const Eye: Icon
-  export const TrendingUp: Icon
-  export const Film: Icon
-  export const ThumbsUp: Icon
-  export const ThumbsDown: Icon
-  export const Star: Icon
-  export const Save: Icon
-  export const Siren: Icon
-  export const ExternalLink: Icon
-  export const FileText: Icon
-  export const ChevronRight: Icon
-  export const BookOpen: Icon
-  export const Layers: Icon
-  export const ArrowDown: Icon
+  export const Play: LucideIcon
+  export const Pause: LucideIcon
+  export const Download: LucideIcon
+  export const Headphones: LucideIcon
+  export const Podcast: LucideIcon
+  export const FileText: LucideIcon
+  export const Clock: LucideIcon
+  export const Sparkles: LucideIcon
+  export const Newspaper: LucideIcon
+  export const TrendingUp: LucideIcon
+  export const BookOpen: LucideIcon
+  export const Layers: LucideIcon
+  export const ArrowDown: LucideIcon
+  export const Film: LucideIcon
+  export const ThumbsUp: LucideIcon
+  export const ThumbsDown: LucideIcon
+  export const Star: LucideIcon
+  export const ArrowLeft: LucideIcon
+  export const Calendar: LucideIcon
+  export const Tag: LucideIcon
+  export const BarChart3: LucideIcon
+  export const Users: LucideIcon
+  export const Eye: LucideIcon
+  export const ExternalLink: LucideIcon
+  export const Settings: LucideIcon
+  export const Save: LucideIcon
+  export const ArrowUp: LucideIcon
+  export const Menu: LucideIcon
+  export const X: LucideIcon
+  export const Search: LucideIcon
+  export const ChevronRight: LucideIcon
+  export const ChevronLeft: LucideIcon
+  export const Loader2: LucideIcon
+  export const AlertCircle: LucideIcon
+  export const Check: LucideIcon
+  export const Info: LucideIcon
 }

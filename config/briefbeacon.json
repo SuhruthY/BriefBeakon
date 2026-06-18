@@ -36,6 +36,17 @@
       "github_trending": true
     }
   },
+  "podcast": {
+    "enabled": true,
+    "max_stories": 5,
+    "voices": {
+      "male": "en-US-GuyNeural",
+      "female": "en-US-JennyNeural"
+    },
+    "intro_text": "Welcome to BriefBeakon Daily — your AI-curated briefing for today.",
+    "outro_text": "That's all for today's edition of BriefBeakon Daily. Stay informed, and we'll see you tomorrow.",
+    "max_episodes_in_feed": 50
+  },
   "ai": {
     "provider": "openai",
     "model": "gpt-4o",
