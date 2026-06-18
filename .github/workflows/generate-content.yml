@@ -1,0 +1,57 @@
+name: Generate Content
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Check if publishing time
+        id: check_time
+        run: |
+          CONFIG=$(cat config/briefbeacon.json)
+          TIMES=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);const t=c.scheduler.times.join(' ');console.log(t)")
+          TZ=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.scheduler.timezone)")
+          CURRENT_HOUR=$(TZ=$TZ date +%H)
+          CURRENT_MIN=$(TZ=$TZ date +%M)
+          CURRENT_TIME=$(printf "%02d:%02d" $CURRENT_HOUR $CURRENT_MIN)
+          echo "Current time in $TZ: $CURRENT_TIME"
+          echo "Scheduled times: $TIMES"
+          SHOULD_RUN=false
+          for TIME in $TIMES; do
+            if [ "$CURRENT_TIME" = "$TIME" ]; then
+              SHOULD_RUN=true
+              break
+            fi
+          done
+          echo "should_run=$SHOULD_RUN" >> $GITHUB_OUTPUT
+
+      - name: Generate articles
+        if: steps.check_time.outputs.should_run == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: npm run generate
+
+      - name: Commit generated content
+        if: steps.check_time.outputs.should_run == 'true'
+        run: |
+          git config user.name "BriefBeakon Bot"
+          git config user.email "bot@briefbeakon.ai"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: auto-generate content [$(date -u +'%Y-%m-%d %H:%M UTC')]"
+          git push

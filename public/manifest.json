@@ -1,0 +1,21 @@
+{
+  "name": "BriefBeakon",
+  "short_name": "BriefBeakon",
+  "description": "A Beacon for What Matters Today. Your intelligent daily newspaper powered by AI.",
+  "start_url": "/BriefBeakon/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/BriefBeakon/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/BriefBeakon/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

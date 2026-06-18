@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --color-beacon-50: #eef2ff;
+  --color-beacon-100: #e0e7ff;
+  --color-beacon-200: #c7d2fe;
+  --color-beacon-300: #a5b4fc;
+  --color-beacon-400: #818cf8;
+  --color-beacon-500: #6366f1;
+  --color-beacon-600: #4f46e5;
+  --color-beacon-700: #4338ca;
+  --color-beacon-800: #3730a3;
+  --color-beacon-900: #312e81;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+::selection {
+  background-color: #6366f1;
+  color: white;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.6); }
+}
+
+.beacon-glow {
+  animation: glow 3s ease-in-out infinite;
+}
