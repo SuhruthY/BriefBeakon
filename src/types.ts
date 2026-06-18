@@ -7,7 +7,7 @@ export interface SourceLink {
 }
 
 export interface Article {
-  id: string;
+  id?: string;
   slug: string;
   title: string;
   summary: string;
@@ -27,9 +27,6 @@ export interface Article {
   source_url: string;
   source_name: string;
   sentiment_score: number;
-  status: 'draft' | 'published' | 'archived';
-  created_at: string;
-  updated_at: string;
 }
 
 export interface MovieIntelligence {

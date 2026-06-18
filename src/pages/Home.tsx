@@ -40,10 +40,14 @@ function StatCard({ icon: Icon, value, label, suffix }: { icon: React.FC<React.S
   )
 }
 
-function HeroSection({ articleCount }: { articleCount: number }) {
+function HeroSection({ articleCount, loading }: { articleCount: number; loading: boolean }) {
   const { playWhoosh } = useSound()
 
   useEffect(() => { playWhoosh() }, [])
+
+  const scrollToContent = () => {
+    document.getElementById('today-briefing')?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <div className="relative mb-12 sm:mb-16 pt-4 sm:pt-8">
@@ -76,16 +80,22 @@ function HeroSection({ articleCount }: { articleCount: number }) {
         </p>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full max-w-lg mt-8 reveal reveal-delay-3">
-          <StatCard icon={Newspaper} value={articleCount} label="Articles Today" />
-          <StatCard icon={Layers} value={6} label="Categories" />
-          <StatCard icon={BookOpen} value={Math.max(1, Math.floor(articleCount / 3))} label="Avg. Words" suffix="K+" />
-        </div>
+        {!loading && (
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full max-w-lg mt-8 reveal reveal-delay-3">
+            <StatCard icon={Newspaper} value={articleCount} label="Articles Today" />
+            <StatCard icon={Layers} value={6} label="Categories" />
+            <StatCard icon={BookOpen} value={Math.max(1, Math.floor(articleCount / 3))} label="Avg. Words" suffix="K+" />
+          </div>
+        )}
 
         {/* Scroll hint */}
-        <div className="mt-8 text-slate-700 animate-bounce">
-          <ArrowDown className="w-4 h-4" />
-        </div>
+        <button
+          onClick={scrollToContent}
+          className="mt-8 text-slate-700 animate-bounce hover:text-indigo-400 transition-colors cursor-pointer"
+          aria-label="Scroll to articles"
+        >
+          <ArrowDown className="w-5 h-5" />
+        </button>
       </div>
     </div>
   )
@@ -110,9 +120,9 @@ export default function Home() {
 
   return (
     <div>
-      <HeroSection articleCount={articles.length} />
+      <HeroSection articleCount={articles.length} loading={loading} />
 
-      <div className="mb-8 reveal">
+      <div id="today-briefing" className="mb-8 reveal">
         <div className="flex items-center justify-center gap-2 mb-2">
           <TrendingUp className="w-4 h-4 text-indigo-400" />
           <span className="text-xs text-slate-500 tracking-widest uppercase">{today}</span>
