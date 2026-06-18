@@ -1,7 +1,13 @@
 {
   "scheduler": {
-    "times": ["07:00", "13:00", "19:00"],
-    "timezone": "Asia/Kolkata"
+    "times": ["09:00"],
+    "timezone": "Asia/Kolkata",
+    "initial_fill": {
+      "enabled": true,
+      "date": "2026-06-18",
+      "interval_minutes": 15,
+      "articles_per_run": 1
+    }
   },
   "categories": {
     "ai": 3,
@@ -37,7 +43,7 @@
     "temperature": 0.7
   },
   "site": {
-    "title": "BriefBeacon",
+    "title": "BriefBeakon",
     "tagline": "A Beacon for What Matters Today.",
     "description": "Your intelligent daily newspaper powered by AI.",
     "url": "https://suhruash.github.io/BriefBeakon",

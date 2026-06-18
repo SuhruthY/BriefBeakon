@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Sparkles } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
-import { supabase } from '../lib/supabase'
+import { getArticlesByCategory } from '../lib/data'
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../types'
 import type { Article, Category } from '../types'
 
@@ -13,14 +13,8 @@ export default function CategoryPage() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('category', category)
-        .eq('status', 'published')
-        .order('publication_date', { ascending: false })
-
-      if (data) setArticles(data as Article[])
+      const data = await getArticlesByCategory(category || '')
+      setArticles(data)
       setLoading(false)
     }
     load()
@@ -59,7 +53,7 @@ export default function CategoryPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {articles.map(article => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.slug} article={article} />
           ))}
         </div>
       )}

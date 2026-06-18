@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Film, ThumbsUp, ThumbsDown, Star, Siren as Citation } from 'lucide-react'
+import { Film, ThumbsUp, ThumbsDown, Star } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import type { MovieIntelligence as MovieType } from '../types'
 
@@ -9,12 +9,21 @@ export default function MovieIntelligence() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from('movie_intelligence')
-        .select('*')
-        .order('publication_date', { ascending: false })
-
-      if (data) setMovies(data as MovieType[])
+      try {
+        if (supabase) {
+          const { data } = await supabase
+            .from('movie_intelligence')
+            .select('*')
+            .order('publication_date', { ascending: false })
+          if (data) {
+            setMovies(data as MovieType[])
+            setLoading(false)
+            return
+          }
+        }
+      } catch {
+        // Fall through
+      }
       setLoading(false)
     }
     load()
@@ -72,7 +81,7 @@ export default function MovieIntelligence() {
                   <span className="text-sm text-slate-300">Critics: {movie.critic_score ?? 'N/A'}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Users className="w-4 h-4 text-indigo-400" />
+                  <UsersIcon className="w-4 h-4 text-indigo-400" />
                   <span className="text-sm text-slate-300">Audience: {movie.audience_score ?? 'N/A'}</span>
                 </div>
               </div>
@@ -111,8 +120,7 @@ export default function MovieIntelligence() {
               </div>
 
               <div className="flex items-center gap-1 text-sm">
-                <Citation className="w-3 h-3 text-indigo-400" />
-                <span className="text-indigo-400 font-medium">Watch Recommendation:</span>
+                <span className="text-indigo-400 font-medium">Recommendation:</span>
                 <span className="text-slate-300">{movie.watch_recommendation}</span>
               </div>
             </div>
@@ -123,7 +131,7 @@ export default function MovieIntelligence() {
   )
 }
 
-function Users(props: React.ComponentProps<typeof Star>) {
+function UsersIcon(props: React.ComponentProps<typeof Star>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />

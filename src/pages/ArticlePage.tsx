@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Calendar, Tag, BarChart3, Users, Eye, TrendingUp } from 'lucide-react'
-import { supabase } from '../lib/supabase'
+import { getArticleBySlug } from '../lib/data'
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../types'
 import type { Article } from '../types'
 
@@ -12,13 +12,8 @@ export default function ArticlePage() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('slug', slug)
-        .single()
-
-      if (data) setArticle(data as Article)
+      const data = await getArticleBySlug(slug || '')
+      setArticle(data)
       setLoading(false)
     }
     load()

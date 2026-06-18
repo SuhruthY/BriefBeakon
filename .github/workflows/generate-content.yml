@@ -2,7 +2,7 @@ name: Generate Content
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -19,36 +19,63 @@ jobs:
           cache: npm
       - run: npm ci
 
-      - name: Check if publishing time
-        id: check_time
+      - name: Check if generation should run
+        id: check
         run: |
           CONFIG=$(cat config/briefbeacon.json)
-          TIMES=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);const t=c.scheduler.times.join(' ');console.log(t)")
           TZ=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.scheduler.timezone)")
+          INITIAL_FILL=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(JSON.stringify(c.scheduler.initial_fill))")
+
+          FILL_ENABLED=$(echo "$INITIAL_FILL" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.enabled)")
+          FILL_DATE=$(echo "$INITIAL_FILL" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.date)")
+
+          TODAY=$(TZ=$TZ date +%Y-%m-%d)
           CURRENT_HOUR=$(TZ=$TZ date +%H)
           CURRENT_MIN=$(TZ=$TZ date +%M)
           CURRENT_TIME=$(printf "%02d:%02d" $CURRENT_HOUR $CURRENT_MIN)
-          echo "Current time in $TZ: $CURRENT_TIME"
-          echo "Scheduled times: $TIMES"
+
+          echo "Timezone: $TZ"
+          echo "Today (TZ): $TODAY"
+          echo "Current time (TZ): $CURRENT_TIME"
+          echo "Fill enabled: $FILL_ENABLED"
+          echo "Fill date: $FILL_DATE"
+
           SHOULD_RUN=false
-          for TIME in $TIMES; do
-            if [ "$CURRENT_TIME" = "$TIME" ]; then
-              SHOULD_RUN=true
-              break
-            fi
-          done
+          MODE=""
+
+          # Check initial fill mode
+          if [ "$FILL_ENABLED" = "true" ] && [ "$TODAY" = "$FILL_DATE" ]; then
+            SHOULD_RUN=true
+            MODE="fill"
+            echo "mode=fill" >> $GITHUB_OUTPUT
+            echo "Running in initial fill mode (15-min intervals)"
+          else
+            # Normal schedule: check if current time matches configured times
+            TIMES=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);const t=c.scheduler.times.join(' ');console.log(t)")
+            echo "Scheduled times: $TIMES"
+            for TIME in $TIMES; do
+              if [ "$CURRENT_TIME" = "$TIME" ]; then
+                SHOULD_RUN=true
+                MODE="scheduled"
+                echo "mode=scheduled" >> $GITHUB_OUTPUT
+                echo "Running in scheduled mode"
+                break
+              fi
+            done
+          fi
+
           echo "should_run=$SHOULD_RUN" >> $GITHUB_OUTPUT
 
-      - name: Generate articles
-        if: steps.check_time.outputs.should_run == 'true'
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      - name: Generate content (fill mode)
+        if: steps.check.outputs.should_run == 'true' && steps.check.outputs.mode == 'fill'
         run: npm run generate
 
-      - name: Commit generated content
-        if: steps.check_time.outputs.should_run == 'true'
+      - name: Generate content (scheduled mode)
+        if: steps.check.outputs.should_run == 'true' && steps.check.outputs.mode == 'scheduled'
+        run: npm run generate
+
+      - name: Commit and push
+        if: steps.check.outputs.should_run == 'true'
         run: |
           git config user.name "BriefBeakon Bot"
           git config user.email "bot@briefbeakon.ai"

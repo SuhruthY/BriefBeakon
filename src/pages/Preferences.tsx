@@ -21,11 +21,13 @@ export default function Preferences() {
 
   async function save() {
     setSaving(true)
-    const userId = crypto.randomUUID()
-    await supabase.from('user_preferences').upsert({
-      user_id: userId,
-      categories: selected,
-    })
+    if (supabase) {
+      const userId = crypto.randomUUID()
+      await supabase.from('user_preferences').upsert({
+        user_id: userId,
+        categories: selected,
+      })
+    }
     setSaving(false)
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)

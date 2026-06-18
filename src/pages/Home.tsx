@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Sparkles, Newspaper } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
 import CategoryNav from '../components/CategoryNav'
-import { supabase } from '../lib/supabase'
+import { getPublishedArticles } from '../lib/data'
 import type { Article } from '../types'
 
 export default function Home() {
@@ -11,14 +11,8 @@ export default function Home() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('status', 'published')
-        .order('publication_date', { ascending: false })
-        .limit(20)
-
-      if (data) setArticles(data as Article[])
+      const data = await getPublishedArticles()
+      setArticles(data)
       setLoading(false)
     }
     load()
@@ -69,7 +63,7 @@ export default function Home() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {articles.map(article => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.slug} article={article} />
           ))}
         </div>
       )}
