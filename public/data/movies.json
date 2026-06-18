@@ -1,0 +1,180 @@
+[
+  {
+    "id": "oblivion-protocol",
+    "title": "Oblivion Protocol",
+    "slug": "oblivion-protocol",
+    "year": 2026,
+    "overall_sentiment": "Audience and critic reception for \"Oblivion Protocol\" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.",
+    "what_viewers_liked": [
+      "Innovative sound design",
+      "Tight pacing at 2h10m",
+      "Stunning visual effects and cinematography",
+      "Thought-provoking sci-fi narrative"
+    ],
+    "common_criticisms": [
+      "Some plot holes in time travel logic",
+      "Supporting characters underdeveloped",
+      "Third act feels rushed"
+    ],
+    "ai_verdict": "A visually spectacular sci-fi that asks big questions about memory and identity, even if its ambitions occasionally exceed its reach.",
+    "watch_recommendation": "Suitable for ages 13+",
+    "critic_score": 79,
+    "audience_score": 92,
+    "publication_date": "2026-06-18",
+    "tags": [
+      "oblivion-protocol",
+      "2026",
+      "movie-review",
+      "audience-intelligence",
+      "box-office",
+      "in-theaters"
+    ]
+  },
+  {
+    "id": "the-last-monument",
+    "title": "The Last Monument",
+    "slug": "the-last-monument",
+    "year": 2026,
+    "overall_sentiment": "Audience and critic reception for \"The Last Monument\" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.",
+    "what_viewers_liked": [
+      "Educational without being preachy",
+      "Emotionally resonant score",
+      "Outstanding ensemble cast"
+    ],
+    "common_criticisms": [
+      "Third storyline feels unnecessary",
+      "Pacing slows in middle act",
+      "Some historical liberties taken"
+    ],
+    "ai_verdict": "The Last Monument is a masterclass in historical filmmaking that balances spectacle with genuine human drama.",
+    "watch_recommendation": "Perfect for history enthusiasts",
+    "critic_score": 74,
+    "audience_score": 77,
+    "publication_date": "2026-06-18",
+    "tags": [
+      "the-last-monument",
+      "2026",
+      "movie-review",
+      "audience-intelligence",
+      "box-office",
+      "in-theaters"
+    ]
+  },
+  {
+    "id": "neon-hearts",
+    "title": "Neon Hearts",
+    "slug": "neon-hearts",
+    "year": 2026,
+    "overall_sentiment": "Audience and critic reception for \"Neon Hearts\" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.",
+    "what_viewers_liked": [
+      "Inventive action choreography",
+      "Visually stunning cyberpunk aesthetic"
+    ],
+    "common_criticisms": [
+      "Antagonist is one-dimensional",
+      "Some CGI moments look unfinished"
+    ],
+    "ai_verdict": "Style over substance, but what style it is. A visual feast that compensates for its narrative shortcomings with pure cinematic energy.",
+    "watch_recommendation": "Best on big screen",
+    "critic_score": 62,
+    "audience_score": 77,
+    "publication_date": "2026-06-18",
+    "tags": [
+      "neon-hearts",
+      "2026",
+      "movie-review",
+      "audience-intelligence",
+      "box-office",
+      "in-theaters"
+    ]
+  },
+  {
+    "id": "the-whispering-dark",
+    "title": "The Whispering Dark",
+    "slug": "the-whispering-dark",
+    "year": 2026,
+    "overall_sentiment": "Audience and critic reception for \"The Whispering Dark\" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.",
+    "what_viewers_liked": [
+      "Clever practical effects",
+      "Unpredictable plot twists"
+    ],
+    "common_criticisms": [
+      "Character decisions defy logic",
+      "Not for gore-sensitive viewers"
+    ],
+    "ai_verdict": "A return to form for psychological horror that proves practical effects and atmosphere are far more effective than CGI gore.",
+    "watch_recommendation": "Watch with lights on",
+    "critic_score": 67,
+    "audience_score": 93,
+    "publication_date": "2026-06-18",
+    "tags": [
+      "the-whispering-dark",
+      "2026",
+      "movie-review",
+      "audience-intelligence",
+      "box-office",
+      "in-theaters"
+    ]
+  },
+  {
+    "id": "crimson-tide-rising",
+    "title": "Crimson Tide: Rising",
+    "slug": "crimson-tide-rising",
+    "year": 2026,
+    "overall_sentiment": "Audience and critic reception for \"Crimson Tide: Rising\" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.",
+    "what_viewers_liked": [
+      "Gripping geopolitical plot",
+      "Strong military accuracy",
+      "Strong male and female leads",
+      "Excellent sound mixing"
+    ],
+    "common_criticisms": [
+      "Familiar premise",
+      "Slow buildup in first hour"
+    ],
+    "ai_verdict": "A taut military thriller that respects its audiences intelligence while delivering genuine tension and spectacular set pieces.",
+    "watch_recommendation": "Perfect for military thriller fans",
+    "critic_score": 72,
+    "audience_score": 83,
+    "publication_date": "2026-06-18",
+    "tags": [
+      "crimson-tide-rising",
+      "2026",
+      "movie-review",
+      "audience-intelligence",
+      "box-office",
+      "in-theaters"
+    ]
+  },
+  {
+    "id": "echoes-of-tomorrow",
+    "title": "Echoes of Tomorrow",
+    "slug": "echoes-of-tomorrow",
+    "year": 2026,
+    "overall_sentiment": "Audience and critic reception for \"Echoes of Tomorrow\" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.",
+    "what_viewers_liked": [
+      "Heartwarming conclusion",
+      "Excellent child actor performance",
+      "Beautiful cinematography",
+      "Emotional family story at its core"
+    ],
+    "common_criticisms": [
+      "Some plot convenience",
+      "Supporting characters are thin",
+      "Time travel rules are inconsistent"
+    ],
+    "ai_verdict": "A rare film that uses science fiction as a vehicle for genuine emotional storytelling about family, loss, and second chances.",
+    "watch_recommendation": "Tissues recommended",
+    "critic_score": 90,
+    "audience_score": 73,
+    "publication_date": "2026-06-18",
+    "tags": [
+      "echoes-of-tomorrow",
+      "2026",
+      "movie-review",
+      "audience-intelligence",
+      "box-office",
+      "in-theaters"
+    ]
+  }
+]

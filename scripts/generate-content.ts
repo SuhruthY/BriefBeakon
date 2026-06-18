@@ -35,6 +35,22 @@ interface Article {
   status: string;
 }
 
+interface MovieReport {
+  id: string;
+  title: string;
+  slug: string;
+  year: number;
+  overall_sentiment: string;
+  what_viewers_liked: string[];
+  common_criticisms: string[];
+  ai_verdict: string;
+  watch_recommendation: string;
+  critic_score: number;
+  audience_score: number;
+  publication_date: string;
+  tags: string[];
+}
+
 const CATEGORY_DATA: Record<string, {
   headlines: string[];
   intros: string[];
@@ -559,6 +575,114 @@ function saveState(state: ContentState): void {
   writeFileSync(statePath, JSON.stringify(state, null, 2), 'utf-8');
 }
 
+// ─── Movie Intelligence ──────────────────────────────────────────
+
+const MOVIES = [
+  {
+    title: 'Oblivion Protocol',
+    year: 2026,
+    likes: ['Stunning visual effects and cinematography', 'Thought-provoking sci-fi narrative', 'Strong lead performance', 'Innovative sound design', 'Tight pacing at 2h10m'],
+    criticisms: ['Third act feels rushed', 'Supporting characters underdeveloped', 'Some plot holes in time travel logic', 'Ending may divide audiences'],
+    verdicts: [
+      'A visually spectacular sci-fi that asks big questions about memory and identity, even if its ambitions occasionally exceed its reach.',
+      'Oblivion Protocol is that rare blockbuster that combines genuine intellectual ambition with crowd-pleasing spectacle.',
+    ],
+    recommendations: ['Must-watch for sci-fi fans', 'Best experienced in IMAX', 'Suitable for ages 13+'],
+  },
+  {
+    title: 'The Last Monument',
+    year: 2026,
+    likes: ['Powerful historical narrative', 'Outstanding ensemble cast', 'Beautiful period production design', 'Emotionally resonant score', 'Educational without being preachy'],
+    criticisms: ['Runtime of 2h45m feels long', 'Some historical liberties taken', 'Third storyline feels unnecessary', 'Pacing slows in middle act'],
+    verdicts: [
+      'A sweeping historical epic that educates while it entertains, anchored by performances that will be remembered come awards season.',
+      'The Last Monument is a masterclass in historical filmmaking that balances spectacle with genuine human drama.',
+    ],
+    recommendations: ['Perfect for history enthusiasts', 'Awards season contender', 'Prepare for a long but rewarding sit'],
+  },
+  {
+    title: 'Neon Hearts',
+    year: 2026,
+    likes: ['Visually stunning cyberpunk aesthetic', 'Inventive action choreography', 'Strong female protagonist', 'Excellent world-building', 'Memorable soundtrack'],
+    criticisms: ['Story follows predictable beats', 'Romantic subplot feels forced', 'Some CGI moments look unfinished', 'Antagonist is one-dimensional'],
+    verdicts: [
+      'Neon Hearts delivers exactly what fans of the genre want — stunning visuals, great action, and a protagonist worth rooting for — even if it breaks little new ground.',
+      'Style over substance, but what style it is. A visual feast that compensates for its narrative shortcomings with pure cinematic energy.',
+    ],
+    recommendations: ['Great for cyberpunk fans', 'Best on big screen', 'Good entry point for newcomers to the genre'],
+  },
+  {
+    title: 'The Whispering Dark',
+    year: 2026,
+    likes: ['Genuinely frightening atmosphere', 'Clever practical effects', 'Strong sound design', 'Tight 98-minute runtime', 'Unpredictable plot twists'],
+    criticisms: ['Some jump scares feel cheap', 'Final act explanation is convoluted', 'Character decisions defy logic', 'Not for gore-sensitive viewers'],
+    verdicts: [
+      'A return to form for psychological horror that proves practical effects and atmosphere are far more effective than CGI gore.',
+      'The Whispering Dark reminds us that the best horror films work because of what they dont show, not what they do.',
+    ],
+    recommendations: ['For horror purists', 'Not for casual viewers', 'Watch with lights on'],
+  },
+  {
+    title: 'Crimson Tide: Rising',
+    year: 2026,
+    likes: ['Tense submarine warfare sequences', 'Strong military accuracy', 'Excellent sound mixing', 'Gripping geopolitical plot', 'Strong male and female leads'],
+    criticisms: ['Technobabble may confuse general audiences', 'Slow buildup in first hour', 'Familiar premise', 'Some clichéd dialogue'],
+    verdicts: [
+      'A taut military thriller that respects its audiences intelligence while delivering genuine tension and spectacular set pieces.',
+      'Crimson Tide: Rising proves the submarine thriller genre still has teeth, delivering edge-of-your-seat tension from start to finish.',
+    ],
+    recommendations: ['Perfect for military thriller fans', 'See it in theaters for the sound design', 'May be too intense for younger viewers'],
+  },
+  {
+    title: 'Echoes of Tomorrow',
+    year: 2026,
+    likes: ['Original time travel concept', 'Emotional family story at its core', 'Beautiful cinematography', 'Excellent child actor performance', 'Heartwarming conclusion'],
+    criticisms: ['Time travel rules are inconsistent', 'Some plot convenience', 'Supporting characters are thin', 'Could have been 15 minutes shorter'],
+    verdicts: [
+      'A rare film that uses science fiction as a vehicle for genuine emotional storytelling about family, loss, and second chances.',
+      'Echoes of Tomorrow reminds us that the best sci-fi isnt about technology — its about the human heart.',
+    ],
+    recommendations: ['Family-friendly sci-fi', 'Tissues recommended', 'Great date night movie'],
+  },
+];
+
+function generateMovieReport(movie: typeof MOVIES[0]): MovieReport {
+  const today = new Date();
+  const dateStr = today.toISOString().split('T')[0];
+  const slug = movie.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const criticScore = Math.floor(65 + Math.random() * 30);
+  const audienceScore = Math.floor(60 + Math.random() * 35);
+  const offset = Math.floor(Math.random() * 5) - 5;
+
+  // Randomize which liked/criticism items appear (shuffle and pick some)
+  const shuffledLikes = [...movie.likes].sort(() => Math.random() - 0.5);
+  const shuffledCritisisms = [...movie.criticisms].sort(() => Math.random() - 0.5);
+
+  return {
+    id: slug,
+    title: movie.title,
+    slug,
+    year: movie.year,
+    overall_sentiment: `Audience and critic reception for "${movie.title}" has been broadly positive, with particular praise for its creative vision and technical achievements. The film has generated significant discussion across social media platforms and review aggregators, with audiences praising its ambition while some critics note areas where execution falls short of its considerable aspirations.`,
+    what_viewers_liked: shuffledLikes.slice(0, 2 + Math.floor(Math.random() * 3)),
+    common_criticisms: shuffledCritisisms.slice(0, 2 + Math.floor(Math.random() * 2)),
+    ai_verdict: movie.verdicts[Math.floor(Math.random() * movie.verdicts.length)],
+    watch_recommendation: movie.recommendations[Math.floor(Math.random() * movie.recommendations.length)],
+    critic_score: criticScore + offset,
+    audience_score: audienceScore,
+    publication_date: dateStr,
+    tags: [movie.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), `${movie.year}`, 'movie-review', 'audience-intelligence', 'box-office', 'in-theaters'],
+  };
+}
+
+function saveMovieStaticData(movies: MovieReport[]): void {
+  const dataDir = join(__dirname, '..', 'public', 'data');
+  mkdirSync(dataDir, { recursive: true });
+  const moviesPath = join(dataDir, 'movies.json');
+  writeFileSync(moviesPath, JSON.stringify(movies, null, 2), 'utf-8');
+  console.log(`  Saved movies data: ${moviesPath} (${movies.length} movies)`);
+}
+
 async function main() {
   console.log('Starting BriefBeakon content generation...');
   console.log(`Config: schedule=${JSON.stringify(config.scheduler)}`);
@@ -589,7 +713,12 @@ async function main() {
     saveStaticData(state.articles);
   }
 
-  console.log(`Done. Generated ${newArticles.length} new article(s). Total: ${state.articles.length}`);
+  // Generate movie intelligence reports
+  console.log(`Generating ${MOVIES.length} movie intelligence reports...`);
+  const movies = MOVIES.map(m => generateMovieReport(m));
+  saveMovieStaticData(movies);
+
+  console.log(`Done. Generated ${newArticles.length} new article(s). Total: ${state.articles.length} | Movies: ${movies.length}`);
 }
 
 main().catch(console.error);
