@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Clock, Tag } from 'lucide-react'
+import { Clock, Tag, FileText, ExternalLink } from 'lucide-react'
 import type { Article } from '../types'
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../types'
 
@@ -28,8 +28,22 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       <p className="text-sm text-slate-400 line-clamp-2 mb-3">
         {article.summary}
       </p>
+      <div className="flex items-center gap-3 text-xs text-slate-600">
+        {article.word_count > 0 && (
+          <span className="flex items-center gap-1">
+            <FileText className="w-3 h-3" />
+            {article.word_count.toLocaleString()} words
+          </span>
+        )}
+        {article.source_links?.length > 0 && (
+          <span className="flex items-center gap-1">
+            <ExternalLink className="w-3 h-3" />
+            {article.source_links.length} sources
+          </span>
+        )}
+      </div>
       {article.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 mt-3">
           {article.tags.slice(0, 3).map(tag => (
             <span key={tag} className="flex items-center gap-1 text-xs text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">
               <Tag className="w-3 h-3" />

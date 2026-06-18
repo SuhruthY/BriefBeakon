@@ -19,4 +19,6 @@ declare module 'lucide-react' {
   export const Star: Icon
   export const Save: Icon
   export const Siren: Icon
+  export const ExternalLink: Icon
+  export const FileText: Icon
 }

@@ -1,5 +1,11 @@
 export type Category = 'ai' | 'technology' | 'business' | 'movies' | 'jobs' | 'sports' | 'general';
 
+export interface SourceLink {
+  title: string;
+  url: string;
+  domain: string;
+}
+
 export interface Article {
   id: string;
   slug: string;
@@ -9,11 +15,15 @@ export interface Article {
   publication_date: string;
   author: string;
   content: string;
+  word_count: number;
   key_takeaways: string[];
   public_sentiment: string;
   impact_analysis: string;
   future_outlook: string;
   tags: string[];
+  source_links: SourceLink[];
+  meta_description: string;
+  keywords: string[];
   source_url: string;
   source_name: string;
   sentiment_score: number;
@@ -47,6 +57,12 @@ export interface BriefBeaconConfig {
   scheduler: {
     times: string[];
     timezone: string;
+    initial_fill?: {
+      enabled: boolean;
+      date: string;
+      interval_minutes: number;
+      articles_per_run: number;
+    };
   };
   categories: Record<Category, number>;
   sources: {
