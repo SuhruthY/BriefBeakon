@@ -389,6 +389,16 @@ const CATEGORY_DATA: Record<string, {
   },
 };
 
+function pickWeighted(items: [string, number][]): string {
+  const total = items.reduce((s, [, w]) => s + w, 0);
+  let r = Math.random() * total;
+  for (const [key, weight] of items) {
+    r -= weight;
+    if (r <= 0) return key;
+  }
+  return items[items.length - 1][0];
+}
+
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -693,16 +703,33 @@ async function main() {
   const newArticles: Article[] = [];
 
   const isFillMode = process.argv.includes('--fill');
+  const fillCfg = config.scheduler.initial_fill;
+  const today = new Date().toISOString().split('T')[0];
+  const isFillAutoRun = fillCfg?.enabled && today === fillCfg?.date && !isFillMode;
 
-  for (const [category, count] of Object.entries(categories)) {
-    const numArticles = isFillMode ? (count as number) : 1;
-    console.log(`Generating ${numArticles} article(s) for: ${category}`);
-
-    for (let i = 0; i < numArticles; i++) {
+  if (isFillAutoRun) {
+    const perRun = fillCfg.articles_per_run || 1;
+    const cats = Object.entries(categories) as [string, number][];
+    for (let i = 0; i < perRun; i++) {
+      const category = pickWeighted(cats);
       const article = generateArticle(category);
       if (!existingSlugs.has(article.slug)) {
         saveArticle(article);
         newArticles.push(article);
+      }
+    }
+    console.log(`Fill auto-run: generating ${perRun} article(s)`);
+  } else {
+    for (const [category, count] of Object.entries(categories)) {
+      const numArticles = isFillMode ? (count as number) : 1;
+      console.log(`Generating ${numArticles} article(s) for: ${category}`);
+
+      for (let i = 0; i < numArticles; i++) {
+        const article = generateArticle(category);
+        if (!existingSlugs.has(article.slug)) {
+          saveArticle(article);
+          newArticles.push(article);
+        }
       }
     }
   }
@@ -713,16 +740,17 @@ async function main() {
     saveStaticData(state.articles);
   }
 
-  // Generate movie intelligence reports
-  console.log(`Generating ${MOVIES.length} movie intelligence reports...`);
-  const movies = MOVIES.map(m => generateMovieReport(m));
-  saveMovieStaticData(movies);
+  // Movies + podcast: only during scheduled/daily runs, not fill auto-runs
+  if (!isFillAutoRun) {
+    console.log(`Generating ${MOVIES.length} movie intelligence reports...`);
+    const movies = MOVIES.map(m => generateMovieReport(m));
+    saveMovieStaticData(movies);
 
-  // Generate daily podcast
-  const { generatePodcast } = await import('./generate-podcast.js');
-  await generatePodcast();
+    const { generatePodcast } = await import('./generate-podcast.js');
+    await generatePodcast();
+  }
 
-  console.log(`Done. Generated ${newArticles.length} new article(s). Total: ${state.articles.length} | Movies: ${movies.length}`);
+  console.log(`Done. Generated ${newArticles.length} new article(s). Total: ${state.articles.length}`);
 }
 
 main().catch(console.error);
