@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Film, ThumbsUp, ThumbsDown, Star } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Film, ThumbsUp, ThumbsDown, Star, ArrowLeft } from 'lucide-react'
 import { getMovies } from '../lib/data'
 import type { MovieIntelligence as MovieType } from '../types'
 
@@ -18,6 +19,10 @@ export default function MovieIntelligence() {
 
   return (
     <div>
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-white transition-colors mb-4 group">
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to briefing
+      </Link>
+
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Film className="w-5 h-5 text-pink-400" />
@@ -34,12 +39,12 @@ export default function MovieIntelligence() {
       {loading ? (
         <div className="grid gap-6 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 animate-pulse">
-              <div className="h-6 bg-slate-800 rounded w-3/4 mb-4" />
-              <div className="h-4 bg-slate-800 rounded w-1/2 mb-6" />
+            <div key={i} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <div className="skeleton-pulse h-6 rounded w-3/4 mb-4" />
+              <div className="skeleton-pulse h-4 rounded w-1/2 mb-6" />
               <div className="space-y-2">
-                <div className="h-3 bg-slate-800 rounded w-full" />
-                <div className="h-3 bg-slate-800 rounded w-5/6" />
+                <div className="skeleton-pulse h-3 rounded w-full" />
+                <div className="skeleton-pulse h-3 rounded w-5/6" />
               </div>
             </div>
           ))}
@@ -52,14 +57,17 @@ export default function MovieIntelligence() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2">
-          {movies.map(movie => (
-            <div key={movie.slug || movie.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 hover:border-slate-700 transition-all">
+          {movies.map((movie, i) => (
+            <div
+              key={movie.slug || movie.id}
+              className={`glass glass-hover rounded-xl p-5 sm:p-6 reveal visible reveal-delay-${Math.min(i + 1, 6)}`}
+            >
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h2 className="text-xl font-bold text-white">{movie.title}</h2>
                   {movie.year && <span className="text-sm text-slate-500">{movie.year} Release</span>}
                 </div>
-                <span className="text-xs text-slate-500">In Theaters</span>
+                <span className="text-xs text-slate-600 bg-slate-800/50 px-2 py-0.5 rounded-full">In Theaters</span>
               </div>
 
               <div className="flex items-center gap-4 mb-4">
@@ -70,7 +78,7 @@ export default function MovieIntelligence() {
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Users className="w-4 h-4 text-indigo-400" />
+                  <People className="w-4 h-4 text-indigo-400" />
                   <span className="text-sm text-slate-300">
                     Audience: <span className="font-semibold text-white">{movie.audience_score ?? 'N/A'}</span>/100
                   </span>
@@ -83,26 +91,26 @@ export default function MovieIntelligence() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="p-3 rounded-lg bg-emerald-950/50 border border-emerald-900/50">
+                <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-900/40">
                   <div className="flex items-center gap-1 text-emerald-400 text-xs font-semibold mb-2">
-                    <ThumbsUp className="w-3 h-3" /> What Viewers Liked
+                    <ThumbsUp className="w-3 h-3" /> Liked
                   </div>
                   <ul className="space-y-1">
-                    {movie.what_viewers_liked?.slice(0, 4).map((item, i) => (
-                      <li key={i} className="flex gap-1.5 text-xs text-slate-400">
+                    {movie.what_viewers_liked?.slice(0, 4).map((item, j) => (
+                      <li key={j} className="flex gap-1.5 text-xs text-slate-400">
                         <span className="text-emerald-500 shrink-0">•</span>
                         <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="p-3 rounded-lg bg-rose-950/50 border border-rose-900/50">
+                <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-900/40">
                   <div className="flex items-center gap-1 text-rose-400 text-xs font-semibold mb-2">
-                    <ThumbsDown className="w-3 h-3" /> Common Criticisms
+                    <ThumbsDown className="w-3 h-3" /> Criticisms
                   </div>
                   <ul className="space-y-1">
-                    {movie.common_criticisms?.slice(0, 4).map((item, i) => (
-                      <li key={i} className="flex gap-1.5 text-xs text-slate-400">
+                    {movie.common_criticisms?.slice(0, 4).map((item, j) => (
+                      <li key={j} className="flex gap-1.5 text-xs text-slate-400">
                         <span className="text-rose-500 shrink-0">•</span>
                         <span>{item}</span>
                       </li>
@@ -124,7 +132,7 @@ export default function MovieIntelligence() {
               {movie.tags && movie.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {movie.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className="text-xs text-slate-600 bg-slate-800 px-2 py-0.5 rounded-full">
+                    <span key={tag} className="text-xs text-slate-600 bg-slate-800/50 px-2 py-0.5 rounded-full">
                       {tag}
                     </span>
                   ))}
@@ -138,7 +146,7 @@ export default function MovieIntelligence() {
   )
 }
 
-function Users(props: React.ComponentProps<typeof Star>) {
+function People(props: React.ComponentProps<typeof Star>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />

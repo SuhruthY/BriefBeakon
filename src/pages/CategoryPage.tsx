@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Sparkles } from 'lucide-react'
+import { useParams, Link } from 'react-router-dom'
+import { ArrowLeft, Sparkles } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
 import { getArticlesByCategory } from '../lib/data'
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../types'
@@ -26,6 +26,9 @@ export default function CategoryPage() {
 
   return (
     <div>
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-white transition-colors mb-4 group">
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> All categories
+      </Link>
       <div className="mb-8">
         <span className={`inline-block text-sm font-medium px-3 py-1 rounded-full bg-gradient-to-r ${color} text-white mb-2`}>
           {label}
@@ -36,12 +39,12 @@ export default function CategoryPage() {
       {loading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 animate-pulse">
-              <div className="h-4 bg-slate-800 rounded w-24 mb-3" />
-              <div className="h-5 bg-slate-800 rounded w-full mb-2" />
-              <div className="h-5 bg-slate-800 rounded w-3/4 mb-3" />
-              <div className="h-4 bg-slate-800 rounded w-full mb-1" />
-              <div className="h-4 bg-slate-800 rounded w-2/3" />
+            <div key={i} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <div className="skeleton-pulse h-4 rounded w-24 mb-3" />
+              <div className="skeleton-pulse h-5 rounded w-full mb-2" />
+              <div className="skeleton-pulse h-5 rounded w-3/4 mb-3" />
+              <div className="skeleton-pulse h-4 rounded w-full mb-1" />
+              <div className="skeleton-pulse h-4 rounded w-2/3" />
             </div>
           ))}
         </div>
@@ -52,8 +55,10 @@ export default function CategoryPage() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {articles.map(article => (
-            <ArticleCard key={article.slug} article={article} />
+          {articles.map((article, i) => (
+            <div key={article.slug} className={`reveal visible reveal-delay-${Math.min(i + 1, 6)}`}>
+              <ArticleCard article={article} />
+            </div>
           ))}
         </div>
       )}

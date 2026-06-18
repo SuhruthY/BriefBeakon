@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Save, Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Save, Sparkles, ArrowLeft } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../types'
 import type { Category } from '../types'
@@ -35,6 +36,10 @@ export default function Preferences() {
 
   return (
     <div className="max-w-2xl mx-auto">
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-white transition-colors mb-4 group">
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
+      </Link>
+
       <div className="text-center mb-8">
         <Sparkles className="w-8 h-8 text-indigo-400 mx-auto mb-2" />
         <h1 className="text-3xl font-bold text-white mb-2">Your Interests</h1>
@@ -46,13 +51,13 @@ export default function Preferences() {
           <button
             key={cat}
             onClick={() => toggle(cat)}
-            className={`flex items-center gap-3 p-4 rounded-xl border transition-all text-left ${
+            className={`flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left ${
               selected.includes(cat)
-                ? `bg-gradient-to-r ${CATEGORY_COLORS[cat]} bg-opacity-10 border-transparent text-white`
-                : 'border-slate-800 text-slate-500 hover:border-slate-700'
+                ? `bg-gradient-to-r ${CATEGORY_COLORS[cat]} bg-opacity-10 border-transparent text-white shadow-lg`
+                : 'glass border-slate-700/50 text-slate-500 hover:border-slate-600 hover:text-slate-300'
             }`}
           >
-            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors shrink-0 ${
               selected.includes(cat)
                 ? 'border-white bg-white'
                 : 'border-slate-600'
@@ -66,14 +71,16 @@ export default function Preferences() {
         ))}
       </div>
 
-      <button
-        onClick={save}
-        disabled={saving}
-        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-colors disabled:opacity-50 mx-auto"
-      >
-        <Save className="w-4 h-4" />
-        {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Preferences'}
-      </button>
+      <div className="text-center">
+        <button
+          onClick={save}
+          disabled={saving}
+          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all duration-200 disabled:opacity-50 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 mx-auto"
+        >
+          <Save className="w-4 h-4" />
+          {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Preferences'}
+        </button>
+      </div>
     </div>
   )
 }

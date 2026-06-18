@@ -21,4 +21,8 @@ declare module 'lucide-react' {
   export const Siren: Icon
   export const ExternalLink: Icon
   export const FileText: Icon
+  export const ChevronRight: Icon
+  export const BookOpen: Icon
+  export const Layers: Icon
+  export const ArrowDown: Icon
 }
