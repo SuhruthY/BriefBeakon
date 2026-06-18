@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>BriefBeakon Daily</title>
+    <description>Your AI-curated daily news briefing. Every morning, a fresh 10-15 minute audio digest of the most important stories in AI, technology, business, sports, jobs, and entertainment.</description>
+    <link>https://suhruash.github.io/BriefBeakon</link>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Jun 2026 15:11:41 GMT</lastBuildDate>
+    <itunes:author>BriefBeakon AI</itunes:author>
+    <itunes:summary>A 10-15 minute daily audio briefing covering AI, technology, business, sports, jobs, and entertainment. New episodes generated every morning.</itunes:summary>
+    <itunes:category text="News">
+      <itunes:category text="Daily News"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+  <item>
+    <title>BriefBeakon Daily - 2026-06-18</title>
+    <description>[Introduction] Welcome to BriefBeakon Daily. Today is Thursday, June 18, 2026.
+
+[AI News] Self-Driving Taxis Go Mainstream: Autonomous Fleet Launches in 12 Major Cities.
+
+[Technology News] TSMC Begins Mass Production of 1nm Chips, Ushering in New Era of Computing.
+
+[Business News] Global Markets Rally as Inflation Drops to 2% Target for First Time in Years.
+
+[Closing] Thats all for todays edition of BriefBeakon Daily. Stay informed, and well see you tomorrow.</description>
+    <pubDate>Thu, 18 Jun 2026 03:30:00 GMT</pubDate>
+    <guid isPermaLink="false">podcast-2026-06-18</guid>
+    <enclosure url="https://suhruash.github.io/BriefBeakon/data/podcasts/2026-06-18/audio.mp3" length="5242880" type="audio/mpeg"/>
+    <itunes:duration>13:00</itunes:duration>
+    <itunes:summary>3 stories from BriefBeakon Daily</itunes:summary>
+  </item>
+  <item>
+    <title>BriefBeakon Daily - 2026-06-17</title>
+    <description>[Introduction] Welcome to BriefBeakon Daily. Today is Wednesday, June 17, 2026.
+
+[AI News] OpenAI Unveils GPT-5 with Breakthrough Reasoning Capabilities.
+
+[Technology News] Apple Vision Pro 2 Ships With Half the Weight and Double the Battery Life.
+
+[Closing] Thats all for todays edition of BriefBeakon Daily.</description>
+    <pubDate>Wed, 17 Jun 2026 03:30:00 GMT</pubDate>
+    <guid isPermaLink="false">podcast-2026-06-17</guid>
+    <enclosure url="https://suhruash.github.io/BriefBeakon/data/podcasts/2026-06-17/audio.mp3" length="4194304" type="audio/mpeg"/>
+    <itunes:duration>12:00</itunes:duration>
+    <itunes:summary>2 stories from BriefBeakon Daily</itunes:summary>
+  </item>
+  <item>
+    <title>BriefBeakon Daily - 2026-06-16</title>
+    <description>[Introduction] Welcome to BriefBeakon Daily. Today is Tuesday, June 16, 2026.
+
+[AI News] DeepMinds New AI Solves Decade-Old Biology Problem.
+
+[Business News] Nvidia Becomes First Trillion-Dollar Chip Company.
+
+[Closing] Thats all for todays edition of BriefBeakon Daily.</description>
+    <pubDate>Tue, 16 Jun 2026 03:30:00 GMT</pubDate>
+    <guid isPermaLink="false">podcast-2026-06-16</guid>
+    <enclosure url="https://suhruash.github.io/BriefBeakon/data/podcasts/2026-06-16/audio.mp3" length="3145728" type="audio/mpeg"/>
+    <itunes:duration>11:00</itunes:duration>
+    <itunes:summary>2 stories from BriefBeakon Daily</itunes:summary>
+  </item>
+  </channel>
+</rss>

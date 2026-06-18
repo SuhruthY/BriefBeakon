@@ -23,49 +23,52 @@ jobs:
       - name: Check if generation should run
         id: check
         run: |
-          CONFIG=$(cat config/briefbeacon.json)
-          TZ=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.scheduler.timezone)")
-          INITIAL_FILL=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(JSON.stringify(c.scheduler.initial_fill))")
+          RESULT=$(node -e "
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('config/briefbeacon.json','utf-8'));
+            const tz = config.scheduler.timezone || 'Asia/Kolkata';
+            const fill = config.scheduler.initial_fill || {};
+            const now = new Date();
+            const parts = new Intl.DateTimeFormat('en-CA', {
+              timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+              hour: '2-digit', minute: '2-digit', hour12: false
+            }).formatToParts(now);
+            const get = (t) => parts.find(p => p.type === t)?.value || '';
+            const today = get('year') + '-' + get('month') + '-' + get('day');
+            const currentHour = get('hour');
+            const currentMin = get('minute');
+            const currentTime = currentHour + ':' + currentMin;
 
-          FILL_ENABLED=$(echo "$INITIAL_FILL" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.enabled)")
-          FILL_DATE=$(echo "$INITIAL_FILL" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);console.log(c.date)")
+            console.log('Timezone:', tz);
+            console.log('Today (TZ):', today);
+            console.log('Current time (TZ):', currentTime);
 
-          TODAY=$(TZ=$TZ date +%Y-%m-%d)
-          CURRENT_HOUR=$(TZ=$TZ date +%H)
-          CURRENT_MIN=$(TZ=$TZ date +%M)
-          CURRENT_TIME=$(printf "%02d:%02d" $CURRENT_HOUR $CURRENT_MIN)
+            if (fill.enabled && today === fill.date) {
+              console.log('mode=fill');
+              console.log('Running in initial fill mode (15-min intervals)');
+            } else {
+              const times = config.scheduler.times || ['09:00'];
+              const matched = times.some(t => t === currentTime);
+              if (matched) {
+                console.log('mode=scheduled');
+                console.log('Running in scheduled mode');
+              } else {
+                console.log('mode=skip');
+                console.log('Not a scheduled time, skipping');
+              }
+            }
+          ")
 
-          echo "Timezone: $TZ"
-          echo "Today (TZ): $TODAY"
-          echo "Current time (TZ): $CURRENT_TIME"
-          echo "Fill enabled: $FILL_ENABLED"
-          echo "Fill date: $FILL_DATE"
-
-          SHOULD_RUN=false
-          MODE=""
-
-          # Check initial fill mode
-          if [ "$FILL_ENABLED" = "true" ] && [ "$TODAY" = "$FILL_DATE" ]; then
-            SHOULD_RUN=true
-            MODE="fill"
+          echo "$RESULT"
+          if echo "$RESULT" | grep -q "mode=fill"; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
             echo "mode=fill" >> $GITHUB_OUTPUT
-            echo "Running in initial fill mode (15-min intervals)"
+          elif echo "$RESULT" | grep -q "mode=scheduled"; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+            echo "mode=scheduled" >> $GITHUB_OUTPUT
           else
-            # Normal schedule: check if current time matches configured times
-            TIMES=$(echo "$CONFIG" | node -e "const d=require('fs').readFileSync(0,'utf8');const c=JSON.parse(d);const t=c.scheduler.times.join(' ');console.log(t)")
-            echo "Scheduled times: $TIMES"
-            for TIME in $TIMES; do
-              if [ "$CURRENT_TIME" = "$TIME" ]; then
-                SHOULD_RUN=true
-                MODE="scheduled"
-                echo "mode=scheduled" >> $GITHUB_OUTPUT
-                echo "Running in scheduled mode"
-                break
-              fi
-            done
+            echo "should_run=false" >> $GITHUB_OUTPUT
           fi
-
-          echo "should_run=$SHOULD_RUN" >> $GITHUB_OUTPUT
 
       - name: Generate content (fill mode)
         if: steps.check.outputs.should_run == 'true' && steps.check.outputs.mode == 'fill'
